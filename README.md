@@ -2,6 +2,8 @@
 
 Utility function for writing cleaner `runtime.exs` configs by avoiding branching by `config_env()`.
 
+[![Tests](https://github.com/box-id/config_helpers/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/box-id/config_helpers/actions/workflows/ci.yml)
+
 ## Problem
 
 When developing an application in the `:dev` environment, testing it in `:test` and shipping it in `:prod`, various bits
