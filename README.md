@@ -13,7 +13,7 @@ While `runtime.exs` allows choosing between `System.get_env("KEY", "default")` a
 
 ## Solution
 
-This package solves the problem by providing a `get_env` function which requires a variable to be set only if no default is provided for the current environment.
+This package solves the problem by providing a `get_env` function to be used in `runtime.exs` which requires an environment variable to be set only if no default is provided for the current env.
 
 ### Defaults
 
