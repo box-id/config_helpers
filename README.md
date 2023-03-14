@@ -2,7 +2,12 @@
 
 Utility function for writing cleaner `runtime.exs` configs by avoiding branching by `config_env()`.
 
+[![Hex](https://img.shields.io/hexpm/v/config_helpers.svg)](https://hex.pm/packages/config_helpers)
 [![Tests](https://github.com/box-id/config_helpers/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/box-id/config_helpers/actions/workflows/ci.yml)
+
+- [Install from Hex](https://hex.pm/packages/config_helpers)
+- [Documentation available on hexdoc](https://hexdocs.pm/config_helpers)
+- [Source code on GitHub](https://github.com/box-id/config_helpers)
 
 ## Problem
 
