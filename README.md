@@ -32,9 +32,15 @@ config :my_app, MQTT,
   client_prefix: get_env("MQTT_PREFIX", "my_app_"),
   # Defaults can be set for some environments only, requiring it in others.
   host: get_env("MQTT_HOST", dev: "localhost", test: "localhost"),
-  # Samve as above, as `non_prod` is an alias for `dev` and `test`.
+  # Same as above, since `non_prod` is an alias for `dev` and `test`.
   auth: get_env("MQTT_AUTH", non_prod: "dummy"),
 ```
+
+For `System.get_env/2`, empty environemnt variables (returned as empty strings) count as being set. This can be
+intentional, but it can also happen by accident at shell level when exporting undefined variables.
+
+To avoid mistakes, we've chosen to require explicit opt in to allow empty variables using the `allow_empty: true` option.
+By default, empty environment variables count as nonexistant.
 
 ### Types
 

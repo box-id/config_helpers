@@ -21,7 +21,7 @@ defmodule ConfigHelpers do
   Read configuration from an environment variables while providing defaults for some envs.
 
   Defaults can be given as keyword list or single value (equivalent to `default: <value>`). If the given `key` is
-  not set in the environment (empty string counts as being set), default keys are checked in the following order:
+  not set in the environment (and not empty, see `allow_empty`), default keys are checked in the following order:
 
   1. Current env, e.g. `:dev`, `:test` or `:prod`
   2. `:non_prod`, if current env is `:dev` or `:test`
@@ -33,7 +33,9 @@ defmodule ConfigHelpers do
 
   * `as:` Typecast values to `:integer` or `:boolean`
     * For `:boolean`, the following values are considered truthy: `#{inspect(@accepted_true_values)}`
-    * For `:integer`, passing a value that fails conversion using `String.to_integer/1` causes `ArgumentError` to be raised.
+    * For `:integer`, passing a value that fails conversion using `String.to_integer/1` causes `ArgumentError` to be
+      raised.
+  * `allow_empty:` Whether to accept empty strings as being set. By default, empty strings don't count as being set.
   """
   def get_env(key, defaults \\ [])
 
@@ -44,7 +46,11 @@ defmodule ConfigHelpers do
   def get_env(key, defaults) do
     case System.fetch_env(key) do
       {:ok, value} ->
-        value
+        if value != "" or Keyword.get(defaults, :allow_empty, false) do
+          value
+        else
+          find_default(key, defaults)
+        end
 
       :error ->
         find_default(key, defaults)
@@ -89,7 +95,10 @@ defmodule ConfigHelpers do
   end
 
   defp try_infer_cast(value, options, key) do
-    case List.first(options) do
+    options
+    # Pick first defaults entry, avoid picking an option.
+    |> Enum.find(fn {key, _value} -> key in ~w(dev test prod non_prod default)a end)
+    |> case do
       {_key, default} when is_integer(default) ->
         cast_to_integer(value, key)
 

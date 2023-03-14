@@ -54,6 +54,22 @@ defmodule ConfigHelperTests do
     end
 
     test "spcific env take precedence over `non_prod`" do
+      set_process_env(:test)
+      assert "test-host" == get_env("FOO_TEST", non_prod: "localhost", test: "test-host")
+    end
+
+    test "empty environment variables are only allowed when allow_empty is set" do
+      System.put_env("FOO_TEST", "")
+
+      set_process_env(:dev)
+      assert "localhost" == get_env("FOO_TEST", non_prod: "localhost")
+
+      set_process_env(:dev)
+      assert "" == get_env("FOO_TEST", non_prod: "localhost", allow_empty: true)
+
+      assert_raise ConfigHelpers.EnvError, fn ->
+        get_env("FOO_TEST")
+      end
     end
   end
 
@@ -67,7 +83,7 @@ defmodule ConfigHelperTests do
 
       assert_raise ArgumentError, fn ->
         System.put_env("FOO_TEST", "")
-        get_env("FOO_TEST", as: :integer)
+        get_env("FOO_TEST", as: :integer, allow_empty: true)
       end
 
       assert_raise ArgumentError, fn ->
@@ -104,7 +120,7 @@ defmodule ConfigHelperTests do
   describe "get_env with as: boolean" do
     test "supports casting env value to boolean" do
       System.put_env("FOO_TEST", "")
-      assert false == get_env("FOO_TEST", as: :boolean)
+      assert false == get_env("FOO_TEST", as: :boolean, allow_empty: true)
 
       System.put_env("FOO_TEST", "meh")
       assert false == get_env("FOO_TEST", as: :boolean)
