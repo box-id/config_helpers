@@ -38,6 +38,8 @@ config :my_app, MQTT,
   auth: get_env("MQTT_AUTH", non_prod: "dummy"),
 ```
 
+#### Empty Variables
+
 For `System.get_env/2`, empty environment variables (returned as empty strings) count as being set. This can be
 intentional, but it can also happen by accident at shell level when exporting undefined variables.
 
