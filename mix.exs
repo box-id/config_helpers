@@ -4,7 +4,7 @@ defmodule ConfigHelpers.MixProject do
   def project do
     [
       app: :config_helpers,
-      version: "0.1.0",
+      version: "1.0.0",
       elixir: "~> 1.13",
       deps: deps(),
       # There is no build-time configuration, so share the build results between environments.
