@@ -1,8 +1,8 @@
 defmodule ConfigHelpers do
   @moduledoc """
-  Module to be imported by `runtime.exs` to allow acessing the `get_env` function.
+  Module to be imported by `runtime.exs` to allow accessing the `get_env` function.
 
-  Note that functions of this module are not supposed to be called by regular applicaton code since they use
+  Note that functions of this module are not supposed to be called by regular application code since they use
   `Config.config_env()` which is only possible while reading config files.
   """
   require Config

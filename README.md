@@ -11,11 +11,13 @@ of configuration may need to be loaded from environment. In some environments, c
 have defaults that work in most situations, but should still be configurable. In production however, a default such as
 `DB_HOST=localhost` might be dangerous, so the application should enforce that a value is specified.
 
-While `runtime.exs` allows choosing between `System.get_env("KEY", "default")` and `System.fetch_env!("KEY")` depending on `config_env()`, this quickly becomes repetitive.
+While `runtime.exs` allows choosing between `System.get_env("KEY", "default")` and `System.fetch_env!("KEY")` depending
+on `config_env()`, this quickly becomes repetitive.
 
 ## Solution
 
-This package solves the problem by providing a `get_env` function to be used in `runtime.exs` which requires an environment variable to be set only if no default is provided for the current env.
+This package solves the problem by providing a `get_env` function to be used in `runtime.exs` which requires an
+environment variable to be set only if no default is provided for the current env.
 
 ### Defaults
 
@@ -36,11 +38,11 @@ config :my_app, MQTT,
   auth: get_env("MQTT_AUTH", non_prod: "dummy"),
 ```
 
-For `System.get_env/2`, empty environemnt variables (returned as empty strings) count as being set. This can be
+For `System.get_env/2`, empty environment variables (returned as empty strings) count as being set. This can be
 intentional, but it can also happen by accident at shell level when exporting undefined variables.
 
-To avoid mistakes, we've chosen to require explicit opt in to allow empty variables using the `allow_empty: true` option.
-By default, empty environment variables count as nonexistant.
+To avoid mistakes, we've chosen to require explicit opt in to allow empty variables using the `allow_empty: true`
+option. By default, empty environment variables count as nonexistent.
 
 ### Types
 
