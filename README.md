@@ -69,6 +69,23 @@ config :my_app, MQTT,
   auto_reconnect: get_env("MQTT_RECONNECT", false)
 ```
 
+### Optional Environment Keys
+
+In production, services are often intentionally configured to fail when required environment variables are missing. This ensures that critical features are not silently disabled due to a misconfiguration. However, when running the same production build in other environments (e.g. test/local development), it is often necessary to start the service without production-only keys.
+
+To support this, version `1.1.0` introduced a convention: setting the `DISABLED_<original_key>` environment variable. If set to a truthy value, it will:
+
+- Instruct the `get_env` to treat the corresponding `<original_key>` as **disabled**, even if it is present.
+- Override the `<original_key>`'s value to `nil`.
+- Prevent startup failures due to missing or misconfigured `<original_key>`s.
+
+Example:
+
+```bash
+# Disable the requirement for MQTT_PORT
+export DISABLED_MQTT_PORT=true
+```
+
 ## Installation
 
 The package can be installed by adding `config_helpers` to your list of dependencies in `mix.exs`:
@@ -76,7 +93,7 @@ The package can be installed by adding `config_helpers` to your list of dependen
 ```elixir
 def deps do
   [
-    {:config_helpers, "~> 0.1.0"}
+    {:config_helpers, "~> 1.1.0"}
   ]
 end
 ```

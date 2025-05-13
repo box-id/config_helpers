@@ -9,6 +9,7 @@ defmodule ConfigHelperTests do
 
     on_exit(fn ->
       System.delete_env("FOO_TEST")
+      System.delete_env("DISABLED_FOO_TEST")
     end)
   end
 
@@ -153,6 +154,25 @@ defmodule ConfigHelperTests do
       assert "true" == get_env("FOO_TEST", "true")
       assert true == get_env("FOO_TEST", false)
       assert true == get_env("FOO_TEST", prod: false)
+    end
+  end
+
+  describe "get_env with disabled env var" do
+    test "returns nil if env var is disabled, no env var" do
+      System.put_env("DISABLED_FOO_TEST", "true")
+      assert nil == get_env("FOO_TEST")
+    end
+
+    test "returns nil if env var is disabled, env var set" do
+      System.put_env("DISABLED_FOO_TEST", "true")
+      System.put_env("FOO_TEST", "bar")
+      assert nil == get_env("FOO_TEST")
+    end
+
+    test "returns env var if the disabled flag is falsy" do
+      System.put_env("DISABLED_FOO_TEST", "false")
+      System.put_env("FOO_TEST", "bar")
+      assert "bar" == get_env("FOO_TEST")
     end
   end
 
