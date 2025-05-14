@@ -69,15 +69,15 @@ config :my_app, MQTT,
   auto_reconnect: get_env("MQTT_RECONNECT", false)
 ```
 
-### Optional Environment Keys
+### Disabling Individual Environment Keys
 
 In production, services are often intentionally configured to fail when required environment variables are missing. This ensures that critical features are not silently disabled due to a misconfiguration. However, when running the same production build in other environments (e.g. test/local development), it is often necessary to start the service without production-only keys.
 
 To support this, version `1.1.0` introduced a convention: setting the `DISABLED_<original_key>` environment variable. If set to a truthy value, it will:
 
 - Instruct the `get_env` to treat the corresponding `<original_key>` as **disabled**, even if it is present.
-- Override the `<original_key>`'s value to `nil`.
-- Prevent startup failures due to missing or misconfigured `<original_key>`s.
+- Prevent startup failures due to missing `<original_key>`.
+- Override the `<original_key>`'s value to `nil`, instructing the application to not execute the relevant behavior (including checking validity of the configured value)
 
 Example:
 

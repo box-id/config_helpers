@@ -62,12 +62,10 @@ defmodule ConfigHelpers do
   defp fetch_env(key) do
     # Check if the env var is disabled first
     case System.fetch_env("DISABLED_#{key}") do
-      {:ok, value} ->
-        if value in @accepted_true_values,
-          do: :disabled,
-          else: System.fetch_env(key)
+      {:ok, value} when value in @accepted_true_values ->
+        :disabled
 
-      :error ->
+      _ ->
         System.fetch_env(key)
     end
   end
