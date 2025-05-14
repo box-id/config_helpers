@@ -44,18 +44,30 @@ defmodule ConfigHelpers do
   end
 
   def get_env(key, defaults) do
-    case System.fetch_env(key) do
+    case fetch_env(key) do
       {:ok, value} ->
-        if value != "" or Keyword.get(defaults, :allow_empty, false) do
-          value
-        else
-          find_default(key, defaults)
-        end
+        if value != "" or Keyword.get(defaults, :allow_empty, false),
+          do: value,
+          else: find_default(key, defaults)
+
+      :disabled ->
+        nil
 
       :error ->
         find_default(key, defaults)
     end
     |> maybe_cast(defaults, key)
+  end
+
+  defp fetch_env(key) do
+    # Check if the env var is disabled first
+    case System.fetch_env("DISABLED_#{key}") do
+      {:ok, value} when value in @accepted_true_values ->
+        :disabled
+
+      _ ->
+        System.fetch_env(key)
+    end
   end
 
   defp find_default(key, defaults) do
